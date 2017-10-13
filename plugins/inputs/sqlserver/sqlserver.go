@@ -367,7 +367,7 @@ measurement
 , [Other]
 FROM
 (
-SELECT measurement = 'sqlserver_MemoryBreakdown_Percent'
+SELECT measurement = 'sqlserver_Memory_Breakdown-Percent'
 , [Buffer pool] = ISNULL(ROUND([Buffer Pool], 1), 0)
 , [Cache (objects)] = ISNULL(ROUND([Cache (objects)], 1), 0)
 , [Cache (sql plans)] = ISNULL(ROUND([Cache (sql plans)], 1), 0)
@@ -381,7 +381,7 @@ PIVOT
 
 UNION ALL
 
-SELECT measurement = 'sqlserver_MemoryBreakdown_Bytes'
+SELECT measurement = 'sqlserver_Memory_Breakdown-Bytes'
 , [Buffer pool] = ISNULL(ROUND([Buffer Pool], 1), 0)
 , [Cache (objects)] = ISNULL(ROUND([Cache (objects)], 1), 0)
 , [Cache (sql plans)] = ISNULL(ROUND([Cache (sql plans)], 1), 0)
@@ -420,7 +420,7 @@ FROM (SELECT DISTINCT database_name FROM #baseline) AS bl
 
 --Prepare the PIVOT query using the dynamic
 SET @DynamicPivotQuery = N'
-SELECT measurement = ''sqlserver_Databasesize_Logs_Size_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Database_Size_Logs_Size_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, size_on_disk_bytes
@@ -431,7 +431,7 @@ PIVOT(SUM(size_on_disk_bytes) FOR database_name IN (' + @ColumnName + ')) AS PVT
 
 UNION ALL
 
-SELECT measurement = ''sqlserver_Databasesize_Rows_Size_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Database_Size_Rows_Size_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, size_on_disk_bytes
@@ -442,7 +442,7 @@ PIVOT(SUM(size_on_disk_bytes) FOR database_name IN (' + @ColumnName + ')) AS PVT
 
 UNION ALL
 
-SELECT measurement = ''sqlserver_Databasesize_Rows_Size_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Database_Size_Rows_Size_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, database_size_8k_pages
@@ -453,7 +453,7 @@ PIVOT(SUM(database_size_8k_pages) FOR database_name IN (' + @ColumnName + ')) AS
 
 UNION ALL
 
-SELECT measurement = ''sqlserver_Databasesize_Logs_Size_8kPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Database_Size_Logs_Size_8kPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, database_size_8k_pages
@@ -464,7 +464,7 @@ PIVOT(SUM(database_size_8k_pages) FOR database_name IN (' + @ColumnName + ')) AS
 
 UNION ALL
 
-SELECT measurement = ''sqlserver_Databasesize_Rows_MaxSize_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Database_Size_Rows_MaxSize_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, database_max_size_8k_pages
@@ -475,7 +475,7 @@ PIVOT(SUM(database_max_size_8k_pages) FOR database_name IN (' + @ColumnName + ')
 
 UNION ALL
 
-SELECT measurement = ''sqlserver_Databasesize_Logs_MaxSize_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Database_Size_Logs_MaxSize_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, database_max_size_8k_pages
@@ -985,7 +985,7 @@ DECLARE @maxEvents int = 1
 
 SELECT
 ---- measurement
-  measurement = 'sqlserver_CPUHistory_CPUPercent'
+  measurement = 'sqlserver_CPU_History-percent'
 ---- tags
 , servername= REPLACE(@@SERVERNAME, '\', ':')
 , type = 'CPU usage'
