@@ -271,7 +271,7 @@ SELECT @ColumnName= ISNULL(@ColumnName + ',','') + QUOTENAME(counter_name)
 FROM (SELECT DISTINCT counter_name FROM @PCounters) AS bl
 
 SET @DynamicPivotQuery = N'
-SELECT measurement = ''Performance metrics'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Performance metrics''
+SELECT measurement = ''sqlserver_Performance_Metrics'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Performance metrics''
 , ' + @ColumnName + '  FROM
 (
 SELECT counter_name, cntr_value
@@ -367,7 +367,7 @@ measurement
 , [Other]
 FROM
 (
-SELECT measurement = 'Memory breakdown (%)'
+SELECT measurement = 'sqlserver_MemoryBreakdown_Percent'
 , [Buffer pool] = ISNULL(ROUND([Buffer Pool], 1), 0)
 , [Cache (objects)] = ISNULL(ROUND([Cache (objects)], 1), 0)
 , [Cache (sql plans)] = ISNULL(ROUND([Cache (sql plans)], 1), 0)
@@ -381,7 +381,7 @@ PIVOT
 
 UNION ALL
 
-SELECT measurement = 'Memory breakdown (bytes)'
+SELECT measurement = 'sqlserver_MemoryBreakdown_Bytes'
 , [Buffer pool] = ISNULL(ROUND([Buffer Pool], 1), 0)
 , [Cache (objects)] = ISNULL(ROUND([Cache (objects)], 1), 0)
 , [Cache (sql plans)] = ISNULL(ROUND([Cache (sql plans)], 1), 0)
@@ -420,7 +420,7 @@ FROM (SELECT DISTINCT database_name FROM #baseline) AS bl
 
 --Prepare the PIVOT query using the dynamic
 SET @DynamicPivotQuery = N'
-SELECT measurement = ''Log size (bytes)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Databasesize_Logs_Size_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, size_on_disk_bytes
@@ -431,7 +431,7 @@ PIVOT(SUM(size_on_disk_bytes) FOR database_name IN (' + @ColumnName + ')) AS PVT
 
 UNION ALL
 
-SELECT measurement = ''Rows size (bytes)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Databasesize_Rows_Size_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, size_on_disk_bytes
@@ -442,7 +442,7 @@ PIVOT(SUM(size_on_disk_bytes) FOR database_name IN (' + @ColumnName + ')) AS PVT
 
 UNION ALL
 
-SELECT measurement = ''Rows size (8KB pages)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Databasesize_Rows_Size_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, database_size_8k_pages
@@ -453,7 +453,7 @@ PIVOT(SUM(database_size_8k_pages) FOR database_name IN (' + @ColumnName + ')) AS
 
 UNION ALL
 
-SELECT measurement = ''Log size (8KB pages)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Databasesize_Logs_Size_8kPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, database_size_8k_pages
@@ -464,7 +464,7 @@ PIVOT(SUM(database_size_8k_pages) FOR database_name IN (' + @ColumnName + ')) AS
 
 UNION ALL
 
-SELECT measurement = ''Rows max size (8KB pages)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Databasesize_Rows_MaxSize_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, database_max_size_8k_pages
@@ -475,7 +475,7 @@ PIVOT(SUM(database_max_size_8k_pages) FOR database_name IN (' + @ColumnName + ')
 
 UNION ALL
 
-SELECT measurement = ''Logs max size (8KB pages)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
+SELECT measurement = ''sqlserver_Databasesize_Logs_MaxSize_8kbPages'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database size''
 , ' + @ColumnName + '  FROM
 (
 SELECT database_name, database_max_size_8k_pages
@@ -532,7 +532,7 @@ FROM (SELECT DISTINCT DatabaseName FROM #baseline) AS bl
 
 --Prepare the PIVOT query using the dynamic
 SET @DynamicPivotQuery = N'
-SELECT measurement = ''Log read latency (ms)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
+SELECT measurement = ''sqlserver_Database_Stats_Log_Read_Latency-mSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
 , ' + @ColumnName + '  FROM
 (
 SELECT DatabaseName,  ReadLatency
@@ -543,7 +543,7 @@ PIVOT(SUM(ReadLatency) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
 UNION ALL
 
-SELECT measurement = ''Log write latency (ms)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
+SELECT measurement = ''sqlserver_Database_Stats_Log_Write_Latency-mSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
 , ' + @ColumnName + '  FROM
 (
 SELECT DatabaseName,  WriteLatency
@@ -554,7 +554,7 @@ PIVOT(SUM(WriteLatency) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
 UNION ALL
 
-SELECT measurement = ''Rows read latency (ms)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
+SELECT measurement = ''sqlserver_Database_Stats_Rows_Read_Latency-mSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
 , ' + @ColumnName + '  FROM
 (
 SELECT DatabaseName,  ReadLatency
@@ -565,7 +565,7 @@ PIVOT(SUM(ReadLatency) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
 UNION ALL
 
-SELECT measurement = ''Rows write latency (ms)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
+SELECT measurement = ''sqlserver_Database_Stats_Rows_Write_Latency-mSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
 , ' + @ColumnName + '  FROM
 (
 SELECT DatabaseName,  WriteLatency
@@ -576,7 +576,7 @@ PIVOT(SUM(WriteLatency) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
 UNION ALL
 
-SELECT measurement = ''Rows (average bytes/read)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
+SELECT measurement = ''sqlserver_Database_Stats_Rows_AverageBytesPerRead'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
 , ' + @ColumnName + '  FROM
 (
 SELECT DatabaseName,  AvgBytesPerRead
@@ -587,7 +587,7 @@ PIVOT(SUM(AvgBytesPerRead) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTabl
 
 UNION ALL
 
-SELECT measurement = ''Rows (average bytes/write)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
+SELECT measurement = ''sqlserver_Database_Stats_Rows_AverageBytesPerWrite'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
 , ' + @ColumnName + '  FROM
 (
 SELECT DatabaseName,  AvgBytesPerWrite
@@ -598,7 +598,7 @@ PIVOT(SUM(AvgBytesPerWrite) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTab
 
 UNION ALL
 
-SELECT measurement = ''Log (average bytes/read)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
+SELECT measurement = ''sqlserver_Database_Stats_Log_AverageBytesPerRead'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
 , ' + @ColumnName + '  FROM
 (
 SELECT DatabaseName,  AvgBytesPerRead
@@ -609,7 +609,7 @@ PIVOT(SUM(AvgBytesPerRead) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTabl
 
 UNION ALL
 
-SELECT measurement = ''Log (average bytes/write)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
+SELECT measurement = ''sqlserver_Database_Stats_Log_AverageBytesPerWrite)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database stats''
 , ' + @ColumnName + '  FROM
 (
 SELECT DatabaseName,  AvgBytesPerWrite
@@ -684,7 +684,7 @@ SELECT @ColumnName = ISNULL(@ColumnName + ',','') + QUOTENAME(database_name)
 SELECT @ColumnName2 = ISNULL(@ColumnName2 + '+','') + QUOTENAME(database_name)
 	FROM (SELECT DISTINCT database_name FROM #baselinewritten) AS bl
 SET @DynamicPivotQuery = N'
-SELECT measurement = ''Log writes (bytes/sec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
+SELECT measurement = ''sqlserver_Database_IO_Log_Writes_bytesperSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
 , ' + @ColumnName + ', Total = ' + @ColumnName2 + ' FROM
 (
 SELECT database_name, num_of_bytes_written_persec
@@ -693,7 +693,7 @@ WHERE datafile_type = ''LOG''
 ) as V
 PIVOT(SUM(num_of_bytes_written_persec) FOR database_name IN (' + @ColumnName + ')) AS PVTTable
 UNION ALL
-SELECT measurement = ''Rows writes (bytes/sec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
+SELECT measurement = ''sqlserver_Database_IO_Rows_Writes_bytesperSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
 , ' + @ColumnName + ', Total = ' + @ColumnName2 + ' FROM
 (
 SELECT database_name, num_of_bytes_written_persec
@@ -702,7 +702,7 @@ WHERE datafile_type = ''ROWS''
 ) as V
 PIVOT(SUM(num_of_bytes_written_persec) FOR database_name IN (' + @ColumnName + ')) AS PVTTable
 UNION ALL
-SELECT measurement = ''Log reads (bytes/sec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
+SELECT measurement = ''sqlserver_Database_IO_Log_Reads_bytesperSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
 , ' + @ColumnName + ', Total = ' + @ColumnName2 + ' FROM
 (
 SELECT database_name, num_of_bytes_read_persec
@@ -711,7 +711,7 @@ WHERE datafile_type = ''LOG''
 ) as V
 PIVOT(SUM(num_of_bytes_read_persec) FOR database_name IN (' + @ColumnName + ')) AS PVTTable
 UNION ALL
-SELECT measurement = ''Rows reads (bytes/sec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
+SELECT measurement = ''sqlserver_Database_IO_Rows_Reads_bytesperSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
 , ' + @ColumnName + ', Total = ' + @ColumnName2 + ' FROM
 (
 SELECT database_name, num_of_bytes_read_persec
@@ -720,7 +720,7 @@ WHERE datafile_type = ''ROWS''
 ) as V
 PIVOT(SUM(num_of_bytes_read_persec) FOR database_name IN (' + @ColumnName + ')) AS PVTTable
 UNION ALL
-SELECT measurement = ''Log (writes/sec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
+SELECT measurement = ''sqlserver_Database_IO_Log_Writes_numperSec'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
 , ' + @ColumnName + ', Total = ' + @ColumnName2 + ' FROM
 (
 SELECT database_name, num_of_writes_persec
@@ -729,7 +729,7 @@ WHERE datafile_type = ''LOG''
 ) as V
 PIVOT(SUM(num_of_writes_persec) FOR database_name IN (' + @ColumnName + ')) AS PVTTable
 UNION ALL
-SELECT measurement = ''Rows (writes/sec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
+SELECT measurement = ''sqlserver_Database_IO_Rows_writesSec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
 , ' + @ColumnName + ', Total = ' + @ColumnName2 + ' FROM
 (
 SELECT database_name, num_of_writes_persec
@@ -738,7 +738,7 @@ WHERE datafile_type = ''ROWS''
 ) as V
 PIVOT(SUM(num_of_writes_persec) FOR database_name IN (' + @ColumnName + ')) AS PVTTabl
 UNION ALL
-SELECT measurement = ''Log (reads/sec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
+SELECT measurement = ''sqlserver_Database_IO_Log_Reads_numperSec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
 , ' + @ColumnName + ', Total = ' + @ColumnName2 + ' FROM
 (
 SELECT database_name, num_of_reads_persec
@@ -747,7 +747,7 @@ WHERE datafile_type = ''LOG''
 ) as V
 PIVOT(SUM(num_of_reads_persec) FOR database_name IN (' + @ColumnName + ')) AS PVTTable
 UNION ALL
-SELECT measurement = ''Rows (reads/sec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
+SELECT measurement = ''sqlserver_Database_IO_Rows_Reads_numperSec)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''Database IO''
 , ' + @ColumnName + ', Total = ' + @ColumnName2 + ' FROM
 (
 SELECT database_name, num_of_reads_persec
@@ -776,62 +776,62 @@ CREATE  TABLE #Databases
 
 INSERT #Databases (	Measurement, DatabaseName, Value)
 SELECT
-  Measurement = 'Recovery Model FULL'
+  Measurement = 'sqlserver_Database_Properties_RecoveryModel_FULL'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.recovery_model = 1 THEN 1 ELSE 0 END
 FROM sys.databases d
 UNION ALL
 SELECT
-  Measurement = 'Recovery Model BULK_LOGGED'
+  Measurement = 'sqlserver_Database_Properties_RecoveryModel_BULKLOGGED'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.recovery_model = 2 THEN 1 ELSE 0 END
 FROM sys.databases d
 UNION ALL
 SELECT
-  Measurement = 'Recovery Model SIMPLE'
+  Measurement = 'sqlserver_Database_Properties_RecoveryModel_SIMPLE'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.recovery_model = 3 THEN 1 ELSE 0 END
 FROM sys.databases d
 
 UNION ALL
 SELECT
-  Measurement = 'State ONLINE'
+  Measurement = 'sqlserver_Database_Properties_State_ONLINE'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.state = 0 THEN 1 ELSE 0 END
 FROM sys.databases d
 UNION ALL
 SELECT
-  Measurement = 'State RESTORING'
+  Measurement = 'sqlserver_Database_Properties_State_RESTORING'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.state = 1 THEN 1 ELSE 0 END
 FROM sys.databases d
 UNION ALL
 SELECT
-  Measurement = 'State RECOVERING'
+  Measurement = 'sqlserver_Database_Properties_State_RECOVERING'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.state = 2 THEN 1 ELSE 0 END
 FROM sys.databases d
 UNION ALL
 SELECT
-  Measurement = 'State RECOVERY_PENDING'
+  Measurement = 'sqlserver_Database_Properties_State_RECOVERYPENDING'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.state = 3 THEN 1 ELSE 0 END
 FROM sys.databases d
 UNION ALL
 SELECT
-  Measurement = 'State SUSPECT'
+  Measurement = 'sqlserver_Database_Properties_State_SUSPECT'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.state = 4 THEN 1 ELSE 0 END
 FROM sys.databases d
 UNION ALL
 SELECT
-  Measurement = 'State EMERGENCY'
+  Measurement = 'sqlserver_Database_Properties_State_EMERGENCY'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.state = 5 THEN 1 ELSE 0 END
 FROM sys.databases d
 UNION ALL
 SELECT
-  Measurement = 'State OFFLINE'
+  Measurement = 'sqlserver_Database_Properties_State_OFFLINE'
 , DatabaseName = d.Name
 , Value = CASE WHEN d.state = 6 THEN 1 ELSE 0 END
 FROM sys.databases d
@@ -849,7 +849,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''Recovery Model FULL''
+WHERE d.Measurement = ''sqlserver_Database_Properties_RecoveryModel_FULL''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -862,7 +862,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''Recovery Model BULK_LOGGED''
+WHERE d.Measurement = ''sqlserver_Database_Properties_RecoveryModel_BULKLOGGED''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -875,7 +875,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''Recovery Model SIMPLE''
+WHERE d.Measurement = ''sqlserver_Database_Properties_RecoveryModel_SIMPLE''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -889,7 +889,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''State ONLINE''
+WHERE d.Measurement = ''sqlserver_Database_Properties_State_ONLINE''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -902,7 +902,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''State RESTORING''
+WHERE d.Measurement = ''sqlserver_Database_Properties_State_RESTORING''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -915,7 +915,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''State RECOVERING''
+WHERE d.Measurement = ''sqlserver_Database_Properties_State_RECOVERING''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -928,7 +928,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''State RECOVERY_PENDING''
+WHERE d.Measurement = ''State Rsqlserver_Database_Properties_State_RECOVERYPENDING''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -941,7 +941,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''State SUSPECT''
+WHERE d.Measurement = ''sqlserver_Database_Properties_State_SUSPECT''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -954,7 +954,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''State EMERGENCY''
+WHERE d.Measurement = ''sqlserver_Database_Properties_State_EMERGENCY''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 
@@ -967,7 +967,7 @@ SELECT measurement = Measurement, servername = REPLACE(@@SERVERNAME, ''\'', '':'
 SELECT Measurement, DatabaseName, Value
 , Total = (SELECT SUM(Value) FROM #Databases WHERE Measurement = d.Measurement)
 FROM #Databases d
-WHERE d.Measurement = ''State OFFLINE''
+WHERE d.Measurement = ''sqlserver_Database_Properties_State_OFFLINE''
 ) as V
 PIVOT(SUM(Value) FOR DatabaseName IN (' + @ColumnName + ')) AS PVTTable
 '
@@ -985,7 +985,7 @@ DECLARE @maxEvents int = 1
 
 SELECT
 ---- measurement
-  measurement = 'CPU (%)'
+  measurement = 'sqlserver_CPUHistory_CPUPercent'
 ---- tags
 , servername= REPLACE(@@SERVERNAME, '\', ':')
 , type = 'CPU usage'
@@ -1055,7 +1055,7 @@ WHERE spi.object_name NOT LIKE 'SQLServer:Backup Device%'
 	AND NOT EXISTS (SELECT 1 FROM sys.databases WHERE Name = spi.instance_name);
 
 SELECT
- measurement = cc.counter_name
+ measurement = ('sqlserver_Performance_Counters_' + cc.counter_name)
 	+ CASE WHEN LEN(cc.instance_name) > 0 THEN ' | ' + cc.instance_name ELSE '' END
 	+ ' | '
 	+ SUBSTRING( cc.object_name, CHARINDEX(':',  cc.object_name) + 1, LEN( cc.object_name) - CHARINDEX(':',  cc.object_name))
@@ -1431,7 +1431,7 @@ GROUP BY G.WaitCategory;
 
 SELECT
 ---- measurement
-  measurement = 'Wait time (ms)'
+  measurement = 'sqlserver_WaitStatsCategorized_WaitTime-mSec'
 ---- tags
 , servername= REPLACE(@@SERVERNAME, '\', ':')
 , type = 'Wait stats'
@@ -1474,7 +1474,7 @@ UNION ALL
 
 SELECT
 ---- measurement
-  measurement = 'Wait tasks'
+  measurement = 'sqlserver_WaitStatsCategorized_WaitTasks'
 ---- tags
 , server_name= REPLACE(@@SERVERNAME, '\', ':')
 , type = 'Wait stats'
@@ -1540,7 +1540,7 @@ FROM (SELECT DISTINCT volume FROM #volumestats) AS bl
 
 --Prepare the PIVOT query using the dynamic
 SET @DynamicPivotQuery = N'
-SELECT measurement = ''Volume total space (bytes)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''OS Volume space''
+SELECT measurement = ''sqlserver_Volume_Total_Space_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''OS Volume space''
 , ' + @ColumnName + '  FROM
 (
 SELECT volume,  total_bytes
@@ -1550,7 +1550,7 @@ PIVOT(SUM(total_bytes) FOR volume IN (' + @ColumnName + ')) AS PVTTable
 
 UNION ALL
 
-SELECT measurement = ''Volume available space (bytes)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''OS Volume space''
+SELECT measurement = ''sqlserver_Volume_Available_Space_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''OS Volume space''
 , ' + @ColumnName + '  FROM
 (
 SELECT volume,  available_bytes
@@ -1560,7 +1560,7 @@ PIVOT(SUM(available_bytes) FOR volume IN (' + @ColumnName + ')) AS PVTTable
 
 UNION ALL
 
-SELECT measurement = ''Volume used space (bytes)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''OS Volume space''
+SELECT measurement = ''sqlserver_Volume_Used_Space_bytes'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''OS Volume space''
 , ' + @ColumnName + '  FROM
 (
 SELECT volume,  used_bytes
@@ -1570,7 +1570,7 @@ PIVOT(SUM(used_bytes) FOR volume IN (' + @ColumnName + ')) AS PVTTable
 
 UNION ALL
 
-SELECT measurement = ''Volume used space (%)'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''OS Volume space''
+SELECT measurement = ''sqlserver_Volume_Used_Space_percent'', servername = REPLACE(@@SERVERNAME, ''\'', '':''), type = ''OS Volume space''
 , ' + @ColumnName + '  FROM
 (
 SELECT volume,  used_percent
